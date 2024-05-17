@@ -1,9 +1,13 @@
 import AuthService from "../services/auth-service";
-const user = JSON.parse(localStorage.getItem("user"));
-const initialState = user
-  ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null };
+//uncomment this code to activate the authentication using localstorate
 
+// const user = JSON.parse(localStorage.getItem("user"));
+// const initialState = user
+//   ? { status: { loggedIn: true }, user }
+//   : { status: { loggedIn: false }, user: null };
+
+//this is just for the sample
+const initialState = { status: { loggedIn: true } };
 export const auth = {
   namespaced: true,
   state: initialState,

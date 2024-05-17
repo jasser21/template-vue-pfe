@@ -2,15 +2,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
 import Tables from "../views/Tables.vue";
 import Profile from "../views/Profile.vue";
-import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
 import DocumentViewVue from "../views/components/DocumentView.vue";
 import AddDocument from "../views/components/AddDocument.vue";
 import Permissions from "../views/components/Permissions.vue";
 import SharedDocuments from "../views/components/SharedDocuments.vue";
 import DocumentEdit from "../views/components/DocumentEdit.vue";
-
-
 
 import EditProfile from "../views/components/EditProfile.vue";
 
@@ -42,14 +39,9 @@ const routes = [
     component: Signin,
   },
   {
-    path: "/signup",
-    name: "Signup",
-    component: Signup,
-  },
-  {
-    path: '/edit-profile/:id',
-    name: 'EditProfile',
-    component: EditProfile
+    path: "/edit-profile/:id",
+    name: "EditProfile",
+    component: EditProfile,
   },
   { path: "/add-view", name: "add-view", component: AddDocument },
   {
@@ -73,9 +65,12 @@ const router = createRouter({
   linkActiveClass: "active",
 });
 router.beforeEach((to, from, next) => {
-  const publicPages = ["/signin", "/signup"];
+  const publicPages = ["/signin"];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("user");
+
+  //this is just to be able to access the platfrom, change it later
+  const loggedIn = true;
+  //const loggedIn = localStorage.getItem("user");
 
   // trying to access a restricted page + not logged in
   // redirect to login page
