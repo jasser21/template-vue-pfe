@@ -8,8 +8,8 @@
           margin-right: -24px;
           margin-left: -34%;
         ">
-        
-        <span class="mask bg-gradient-success opacity-6"></span>
+
+        <span class="mask opacity-6"></span>
       </div>
       <div class="card shadow-lg mt-n6">
         <div class="card-body p-3">
@@ -49,7 +49,8 @@
             <div class="card-body">
 
               <p class="text-uppercase text-sm">User Information</p>
-              <div v-if="currentUser" class="user-info">
+              <!-- <div v-if="currentUser" class="user-info"> -->
+              <div class="user-info">
                 <div class="user-info-item">
                   <strong>User Name:</strong>
                   <span>{{ currentUser.userName }}</span>
@@ -84,7 +85,11 @@ const store = useStore();
 
 const router = useRouter();
 
-const currentUser = ref(null);
+const currentUser = ref({
+  id: 123,
+  username: 'default_username',
+
+});
 const openEditUserView = (userId) => {
   router.push({ name: 'EditProfile', params: { id: userId } });
 };
@@ -97,7 +102,7 @@ const getCurrentUser = async () => {
       throw new Error("Token not found");
     }
 
-    
+
     const response = await BaseApiService(`Account/me`).list();
 
     currentUser.value = response.data;
