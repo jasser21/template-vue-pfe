@@ -16,13 +16,13 @@
           <div class="row gx-4">
             <div class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img src="../assets/img/team-1.jpg" alt="profile_image" class="shadow-sm w-100 border-radius-lg" />
+                <img :src="avatarUrl" alt="profile_image" class=" w-100 border-radius-lg" />
               </div>
             </div>
             <div class="col-auto my-auto">
 
               <div v-if="currentUser" class="h-100">
-                <div class="mb-1">
+                <div class="mb-1 fs-3">
                   <span>{{ currentUser.userName }}</span>
                 </div>
 
@@ -74,7 +74,7 @@
 import { onBeforeMount, onMounted, onBeforeUnmount } from "vue";
 import BaseApiService from '../services/apiService';
 import { useStore } from "vuex";
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 import setNavPills from "@/assets/js/nav-pills.js";
@@ -87,7 +87,8 @@ const router = useRouter();
 
 const currentUser = ref({
   id: 123,
-  username: 'default_username',
+  userName: 'default_username',
+  email: 'default_email',
 
 });
 const openEditUserView = (userId) => {
@@ -96,23 +97,19 @@ const openEditUserView = (userId) => {
 
 const getCurrentUser = async () => {
   try {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      throw new Error("Token not found");
-    }
-
 
     const response = await BaseApiService(`Account/me`).list();
 
     currentUser.value = response.data;
 
-    console.log(currentUser.value);
+    console.log('currentuser', currentUser.value);
   } catch (error) {
     console.error("Error fetching current user:", error);
   }
 };
-
+const avatarUrl = computed(() => {
+  return `https://ui-avatars.com/api/?background=f3d148&name=${currentUser.value.userName}&length=2&rounded=true&size=128`;
+});
 onMounted(() => {
   store.state.isAbsolute = true;
   setNavPills();

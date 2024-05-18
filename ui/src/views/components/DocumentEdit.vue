@@ -19,23 +19,20 @@
         <option value="1">OCR Pending</option>
         <option value="2">Signed</option>
       </select>
-    </div>
-
-    <label for="fileInput" class="label">Update File:</label>
-      <input type="file" class="form-control" id="fileInput" @change="onFileChange">
-    <div class="button-container">
-      <button class="btn btn-primary" @click="updateDocument">Save Changes</button>
-      <span v-if="saved" class="text-success">Document Updated successfully!</span>
-      <span v-if="error" class="text-danger">Error Updating document. Please try again.</span>
+      <button class="btn btn-primary mt-5" @click="updateDocument">Save Changes</button>
+      <div>
+        <span v-if="saved" class="text-success">Document Updated successfully!</span>
+        <span v-if="error" class="text-danger">Error Updating document. Please try again.</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import BaseApiService from '../../services/apiService';
-
+const router = useRouter();
 const editedDocument = ref({
   name: '',
   contentType: '',
@@ -44,8 +41,6 @@ const editedDocument = ref({
 });
 const saved = ref(false);
 const error = ref(false);
-
-const file = ref(null);
 const route = useRoute();
 
 const fetchDocument = async () => {
@@ -72,10 +67,6 @@ const updateDocument = async () => {
     formData.append('ownerId', editedDocument.value.ownerId);
 
 
-    if (file.value !== null) {
-      formData.append('File', file.value);
-    }
-
     const response = await BaseApiService(`Document/Update`).update(documentId, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -84,15 +75,11 @@ const updateDocument = async () => {
 
     console.log(response.data);
     saved.value = true;
+    router.push('/tables');
   } catch (error) {
     console.error(error);
     error.value = true;
   }
-};
-
-
-const onFileChange = (event) => {
-  file.value = event.target.files[0];
 };
 
 onMounted(fetchDocument);

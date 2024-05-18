@@ -12,11 +12,7 @@
       <label for="description" class="label">Description:</label>
       <input type="text" class="form-control" id="description" v-model="newDocument.description" required>
     </div>
-    
-    <div class="form-group">
-      <label for="fileInput" class="label">Update File:</label>
-      <input type="file" class="form-control" id="file" @change="handleFileUpload">
-    </div>
+
     <div class="button-container">
       <button class="btn btn-primary" @click="addDocument">Add Document</button>
       <span v-if="saved" class="text-success">Document added successfully!</span>
@@ -35,14 +31,13 @@ const newDocument = ref({
   contentType: '',
   description: '',
   creationDate: '',
-  file: null
 });
 
 const saved = ref(false);
 const error = ref(false);
 
 async function addDocument() {
-  try{
+  try {
     const formData = new FormData();
     formData.append('Name', newDocument.value.name);
     formData.append('Description', newDocument.value.description);
@@ -51,15 +46,12 @@ async function addDocument() {
     const response = await BaseApiService(`Document/upload`).create(formData);
     console.log(response.data);
     router.push('/tables');
-  }catch(e){
+  } catch (e) {
     console.log(e);
   }
 }
 
-const handleFileUpload = (event) => {
-  const file = event.target.files[0];
-  newDocument.value.file = file;
-};
+
 </script>
 
 
